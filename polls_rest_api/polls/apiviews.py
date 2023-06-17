@@ -13,6 +13,7 @@ class PollList(generics.ListCreateAPIView):
 
 
 class PollDetail(generics.RetrieveDestroyAPIView):
+    lookup_url_kwarg = 'poll_id'
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
 
