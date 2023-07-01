@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 
 from .models import Poll, Choice
 from  .serializers import PollSerializer, ChoiceSerializer, \
-    VoteSerializer
+    VoteSerializer, UserSerializer
 
 class PollList(generics.ListCreateAPIView):
 
@@ -39,3 +39,7 @@ class CreateVote(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        
+class UserCreate(generics.CreateAPIView):
+    
+    serializer_class = UserSerializer
