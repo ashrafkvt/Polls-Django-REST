@@ -41,5 +41,6 @@ class CreateVote(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         
 class UserCreate(generics.CreateAPIView):
-    
+    authentication_classes = ()
+    permission_classes = ()
     serializer_class = UserSerializer
