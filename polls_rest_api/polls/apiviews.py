@@ -4,6 +4,7 @@ from rest_framework import generics, status
 from django.shortcuts import get_object_or_404
 from django.contrib.auth import authenticate
 from django.http import request
+from rest_framework.exceptions import PermissionDenied
 
 from .models import Poll, Choice
 from  .serializers import PollSerializer, ChoiceSerializer, \
@@ -28,6 +29,16 @@ class ChoiceList(generics.ListCreateAPIView):
     def get_queryset(self):
         queryset = Choice.objects.filter(poll_id=self.kwargs["pk"])
         return queryset
+    
+    def post(self, request, *args, **kwargs):
+        # breakpoint()
+        poll = Poll.objects.get(pk=self.kwargs["pk"])
+        if not request.user == poll.created_by:
+            raise PermissionDenied("You can not create choice for this poll.")
+        choice = Choice(choice_text=request.data.get("choice_text"),
+                        poll=poll)
+        choice.save()
+        return Response(self.get_serializer(choice).data)
     
 
 class CreateVote(APIView):
